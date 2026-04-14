@@ -9,6 +9,9 @@ Medium blog post:- TBD
 
 ## Snoopy agent - A personal assistant to know your day better than you do
 Below is a simple conceptual diagram showing what snoopy does. 
-Note that the goal here is to build something useful but also leverage DSPy capabilities
+
+<img src="./Snoopy_agent.png" alt="Snoopy agent">
+
+<b>Note that the goal here is to build something useful but also to leverage DSPy capabilities.</b>
 
 
