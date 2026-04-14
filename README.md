@@ -1,4 +1,4 @@
-# Runway agent using DSPy + DSPy exploration
+# <> agent using DSPy + DSPy exploration
 
 This repo consists of all the exploration related DSPy which consists of general-purpose modules that makes an attempt to replace prompt engineering (crafting, optimization and evaluation) and traditional vibe checks.
 
