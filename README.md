@@ -15,6 +15,7 @@ Below is a simple conceptual diagram showing what snoopy does.
 <b>Note that the goal here is to build something useful but also to leverage DSPy capabilities.</b>
 
 ##### Folder structure
+```
 snoppy_agent/
 ├── datasets
 │   ├── testset.csv
@@ -28,3 +29,4 @@ snoppy_agent/
     ├── informational.py
     ├── finances.py
     └── life.py
+```
