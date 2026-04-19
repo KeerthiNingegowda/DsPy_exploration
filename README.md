@@ -15,7 +15,11 @@ Below is a simple conceptual diagram showing what snoopy does.
 <b>Note that the goal here is to build something useful but also to leverage DSPy capabilities.</b>
 
 ##### Folder structure
+<<<<<<< HEAD
 ```
+=======
+
+>>>>>>> 6ca9f4d (Snoopy updates)
 snoppy_agent/
 ├── datasets
 │   ├── testset.csv
@@ -29,4 +33,32 @@ snoppy_agent/
     ├── informational.py
     ├── finances.py
     └── life.py
+<<<<<<< HEAD
 ```
+=======
+
+## Implementation
+
+### API keys
+
+For weather, news, and viral twitter trends - Tavily search API has been used. Keep in mind that based on your search depth more credits will be used. Monthly you will get 1000 credits
+
+Tavily search - https://www.tavily.com/
+
+PS:- Twitter and Openweather credits are either expensive or require a credit card. Which is honestly an overkill
+
+Google Dev console access - For Google calendar. For more info checkout this <a href="./snoppy_agent/other_info/google_calendar_access.md"> out.
+
+
+
+
+
+## Other helpful stuff
+
+Format your files earlier using black
+
+```
+black <filename>.py --check #this is to check
+black <filename>.oy #this is to actually format your files
+```
+>>>>>>> 6ca9f4d (Snoopy updates)

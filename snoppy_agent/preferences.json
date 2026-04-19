@@ -1,9 +1,30 @@
 {
 
-    "news_preferences": {
-        "news_topics": []
+   "news_questions" : ["What are top advancements in the field of AI?",
+                        "World economy latest news today",
+                        "Latest news related to trade and tariffs",
+                        "What are recent news in American politics?",
+                        "What are recent news in Canadian politics?",
+                        "What are recent news in Indian politics?",
+                        "Latest Geo-political relations between China, Russia, India, USA and EU",
+                        "What are recent advancements in the field of semi-conductor technology?",
+                        "Which companies are scehduled to go to IPO this week?",
+                        "What are top venture capital firms from Silicon valley investing in?",
+                        "What is gold and silver price in India?"],
 
-    }
 
+    "twitter_tavily" : ["AI",
+                        "Politics",
+                        "Science and Technology",
+                        "AGI",
+                        "Vibe coding",
+                        "Mass layoffs",
+                        "Anthropic, OpenAI, Google, Nvidia, Deepseek"
+                        ],
+
+    "weather_location" : ["Toronto, Ontario, Canada",
+                          "Vancouver, British Columbia, Canada",
+                          "Bengaluru, Karnataka, India"
+                        ]
 
 }
