@@ -30,3 +30,28 @@ snoppy_agent/
     ├── finances.py
     └── life.py
 ```
+
+## Implementation
+
+### API keys
+
+For weather, news, and viral twitter trends - Tavily search API has been used. Keep in mind that based on your search depth more credits will be used. Monthly you will get 1000 credits
+
+Tavily search - https://www.tavily.com/
+
+PS:- Twitter and Openweather credits are either expensive or require a credit card. Which is honestly an overkill
+
+Google Dev console access - For Google calendar. For more info checkout this <a href="./snoppy_agent/other_info/google_calendar_access.md"> out.
+
+
+
+
+
+## Other helpful stuff
+
+Format your files earlier using black
+
+```
+black <filename>.py --check #this is to check
+black <filename>.oy #this is to actually format your files
+```
