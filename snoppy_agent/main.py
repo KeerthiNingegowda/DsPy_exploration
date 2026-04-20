@@ -27,10 +27,14 @@ def start_react_agent():
 
     ##Just invoke as is one can hook it with agent later
     # news_responses = informational.get_news(user_preferences["news_questions"])
-    twitter_responses = informational.get_twitter_trends_info(user_preferences["twitter_tavily"][0:5])
-    #weather_responses = informational.get_weather_info(user_preferences["weather_location"])
-    print(twitter_responses)
-    #pass
+    # twitter_responses = informational.get_twitter_trends_info(user_preferences["twitter_tavily"][0:5])
+    # weather_responses = informational.get_weather_info(user_preferences["weather_location"])
+    # print(twitter_responses)
+
+    ##Life tools
+    events = life.fetch_events(user_preferences["days_lookahead"]) ##Should take the default or be directed from user query
+    print(events)
+    # pass
 
 
 if __name__ == "__main__":

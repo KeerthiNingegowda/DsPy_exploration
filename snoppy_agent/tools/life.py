@@ -2,11 +2,14 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+from datetime import datetime, timedelta, timezone
 import os
 
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
+
 def get_calendar_service():
+    """Authentication and a service object to Google calendar"""
     creds = None
     if os.path.exists("token.json"):
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
@@ -20,24 +23,34 @@ def get_calendar_service():
             f.write(creds.to_json())
     return build("calendar", "v3", credentials=creds)
 
-if __name__ == "__main__":
+
+def fetch_events(days) -> list:
+    """Fetch upcoming events in the next X days from Google calendar
+    Args:
+        days - Number of days ahead
+    Returns
+        list - Consisting of summary of the events and the date. To not disclose too much personal info i.e creator, email account, invitelink - this decision was made
+        The events consist of birthdays, tasks, reminders, training goals and bill due dates. Includes all day events too.
+    """
+
     service = get_calendar_service()
-    
-    # fetch next 5 events
-    from datetime import datetime, timezone
-    now = datetime.now(timezone.utc).isoformat()
-    events = service.events().list(
-        calendarId="primary",
-        timeMin=now,
-        maxResults=5,
-        singleEvents=True,
-        orderBy="startTime"
-    ).execute()
-    
+
+    start_time = datetime.now(timezone.utc)
+    end_time = start_time + timedelta(days=days)
+
+    events = (
+        service.events()
+        .list(
+            calendarId="primary",
+            timeMin=start_time.isoformat(),
+            timeMax=end_time.isoformat(),
+            singleEvents=True,
+            orderBy="startTime",
+        )
+        .execute()
+    )
     items = events.get("items", [])
-    if not items:
-        print("No upcoming events found")
-    else:
-        for event in items:
-            start = event["start"].get("dateTime", event["start"].get("date"))
-            print(f"{start} -- {event['summary']}")
+    return [
+        f"Event - {ele["summary"]} on {ele["start"].get("dateTime") or ele["start"].get("date")}"
+        for ele in items
+    ]

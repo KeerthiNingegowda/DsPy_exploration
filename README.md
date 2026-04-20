@@ -43,6 +43,8 @@ PS:- Twitter and Openweather credits are either expensive or require a credit ca
 
 Google Dev console access - For Google calendar. For more info checkout this <a href="./snoppy_agent/other_info/google_calendar_access.md"> out.
 
+For financial tools, yfinance is used. Please refer to their terms and conditions before you proceed.
+
 
 
 

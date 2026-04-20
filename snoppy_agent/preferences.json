@@ -25,6 +25,8 @@
     "weather_location" : ["Toronto, Ontario, Canada",
                           "Vancouver, British Columbia, Canada",
                           "Bengaluru, Karnataka, India"
-                        ]
+                        ],
+
+    "days_lookahead":10
 
 }
