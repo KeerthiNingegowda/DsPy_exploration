@@ -27,6 +27,9 @@
                           "Bengaluru, Karnataka, India"
                         ],
 
-    "days_lookahead":10
+    "days_lookahead":10,
+
+    "metal_prices":["GC=F", "SI=F"]
+
 
 }

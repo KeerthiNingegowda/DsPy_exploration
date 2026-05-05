@@ -18,7 +18,7 @@ load_dotenv()
 ANTHROPIC_KEY = os.getenv("ANTHROPIC_KEY")
 OPENAI_KEY = os.getenv("OPENAI_KEY")
 
-with open("preferences.json") as f:
+with open("preferences.json") as f:  ##Change the logic to add base paths to search for.
     logger.info("Loading user preferences data")
     user_preferences = json.load(f)
 
@@ -26,14 +26,20 @@ with open("preferences.json") as f:
 def start_react_agent():
 
     ##Just invoke as is one can hook it with agent later
-    # news_responses = informational.get_news(user_preferences["news_questions"])
-    # twitter_responses = informational.get_twitter_trends_info(user_preferences["twitter_tavily"][0:5])
-    # weather_responses = informational.get_weather_info(user_preferences["weather_location"])
-    # print(twitter_responses)
+    news_responses = informational.get_news(user_preferences["news_questions"])
+    print(news_responses)
+    twitter_responses = informational.get_twitter_trends_info(user_preferences["twitter_tavily"][0:5])
+    print(twitter_responses)
+    weather_responses = informational.get_weather_info(user_preferences["weather_location"])
+    print(weather_responses)
 
     ##Life tools
-    events = life.fetch_events(user_preferences["days_lookahead"]) ##Should take the default or be directed from user query
-    print(events)
+    # events = life.fetch_events(user_preferences["days_lookahead"]) ##Should take the default or be directed from user query
+    # print(events)
+
+    #Finances tools
+    metal_prices = finances.get_metal_prices(user_preferences["metal_prices"])
+    print(metal_prices)
     # pass
 
 

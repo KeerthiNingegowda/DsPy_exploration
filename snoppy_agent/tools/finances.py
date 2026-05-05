@@ -1,23 +1,13 @@
 import yfinance as yf
 
-TROY_OUNCE_TO_GRAMS = 31.1035
+##Taking the exchange rate out of the equation as there is a price difference
 
-##Note this calculation seems to be off by 5000 to 500 INR per gram. So use it with caution
-
-def get_metal_prices():
+def get_metal_prices(tickers:list) -> tuple:
     """ Fetch Gold and Silver prices from Yahoo finance. Convert it into INR and return the price per gram
     Note: The yahoo ticker returns the value of purest form of metals available for trading. And in US calculations the quantity is troy ounces.
     """
 
-    metal_tickers = yf.Tickers("GC=F SI=F")
-    print(metal_tickers.tickers["GC=F"].fast_info["currency"], metal_tickers.tickers["GC=F"].fast_info["lastPrice"] )
-    print(metal_tickers.tickers["SI=F"].fast_info["currency"], metal_tickers.tickers["SI=F"].fast_info["lastPrice"] )
-
-    ##Exchange rate
-    inr_rate_usd = yf.Ticker("INR=X").fast_info["lastPrice"]
-    print((metal_tickers.tickers["GC=F"].fast_info["lastPrice"] * inr_rate_usd) / TROY_OUNCE_TO_GRAMS) 
-    print((metal_tickers.tickers["SI=F"].fast_info["lastPrice"] * inr_rate_usd) / TROY_OUNCE_TO_GRAMS) 
-
-
-if __name__ == "__main__":
-    get_metal_prices()
+    metal_tickers = yf.Tickers(" ".join(tickers))
+    return { tickers[0] : f"{metal_tickers.tickers[tickers[0]].fast_info["lastPrice"]} - {metal_tickers.tickers[tickers[0]].fast_info["currency"]}", 
+          tickers[1] : f"{metal_tickers.tickers[tickers[1]].fast_info["lastPrice"]} - {metal_tickers.tickers[tickers[1]].fast_info["currency"]}"
+         }
