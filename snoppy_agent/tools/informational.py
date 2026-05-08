@@ -3,7 +3,8 @@ import json
 import logging
 from dotenv import load_dotenv
 from tavily import TavilyClient
-
+from openai import OpenAI
+from datetime import datetime
 load_dotenv()
 
 TAVILY_KEY = os.getenv("TAVILY_KEY")
@@ -84,5 +85,14 @@ def get_weather_info(cities: list[str]) -> dict:
 
 
 ##Tool 4 - Transit-info - Google Maps api
-def get_transit_info():
-    pass
+def get_transit_info() -> str:
+    """Get Transit info via LLMs"""
+
+    client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
+    response = client.responses.create(
+        model="gpt-4o-mini",
+        tools = [{"type":"web_search"}],
+        input=f"What is the transit schedule using Go-train from Mimico to Union Station, Toronto on {datetime.now().strftime("%Y-%m-%d %H:%m")} in the next 30 minutes?"
+    )
+
+    return response.output_text

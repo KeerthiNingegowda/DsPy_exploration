@@ -57,3 +57,10 @@ Format your files earlier using black
 black <filename>.py --check #this is to check
 black <filename>.oy #this is to actually format your files
 ```
+
+If youn encounter any issues related to token associated with google calendar like below, simply delete token.json and re-run the service. This happens if you haven't used the token for a while
+```
+    raise exceptions.RefreshError(
+google.auth.exceptions.RefreshError: ('invalid_grant: Token has been expired or revoked.', {'error': 'invalid_grant', 'error_description': 'Token has been expired or revoked.'}))
+
+```

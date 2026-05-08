@@ -29,7 +29,32 @@
 
     "days_lookahead":10,
 
-    "metal_prices":["GC=F", "SI=F"]
+    "metal_tickers":["GC=F", "SI=F"],
+    "stock_tickers" : [
+      "VFV.TO","XQQ.TO","SPY",
+      "RY.TO","TD.TO","BNS.TO","BMO.TO",
+      "CNQ.TO","SU.TO","CVE.TO","ENB.TO","XEG.TO",
+      "SHEL","CVX",
+      "GOOGL","TSM",
+      "HMC","TM"
+  ],
+    "stock_period_of_interest" : "3d",
 
+    "credit_card_bill_due_dates" : {
+      
+      "Amex card payment due date" : "15th of every month",
+      "Visa card payment due date" : "10th of every month",
+      "Master card payment due date" : "25th of every month"
+    },
 
+    "payday_info" : {
+      "frequency" : "Monthly",
+      "paydate" : "Last day of every month"
+    },
+
+    "watchlist_items" : [
+            {"item": "Samsung 4K monitor 27 inch", "threshold" : 350},
+            {"item": "Sony WH1000XM5 headphones", "threshold": 200},
+            {"item": "Atomic Habits hardcover book", "threshold": 15.0}
+    ]
 }
