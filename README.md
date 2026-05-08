@@ -45,7 +45,7 @@ Google Dev console access - For Google calendar. For more info checkout this <a 
 
 For financial tools, yfinance is used. Please refer to their terms and conditions before you proceed.
 
-
+For transit search, I am using web search via LLMs directly rather than Google Maps, for brevity
 
 
 
