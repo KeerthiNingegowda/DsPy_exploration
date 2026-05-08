@@ -29,6 +29,7 @@ snoppy_agent/
     ├── informational.py
     ├── finances.py
     └── life.py
+    |___utils.py
 ```
 
 ## Implementation
