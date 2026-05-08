@@ -18,9 +18,34 @@ load_dotenv()
 ANTHROPIC_KEY = os.getenv("ANTHROPIC_KEY")
 OPENAI_KEY = os.getenv("OPENAI_KEY")
 
+#Setup DSPy object
+lm = dspy.LM("anthropic/claude-haiku-4-5-20251001", api_key=ANTHROPIC_KEY)
+dspy.configure(lm=lm, cache=False)
+
 with open("preferences.json") as f:  ##Change the logic to add base paths to search for.
     logger.info("Loading user preferences data")
     user_preferences = json.load(f)
+
+#Create dspy.Signature for I/O
+class SnoopyAgentSignature(dspy.Signature):
+    """ You are Snooopy. A personal assistant to me but with constraints. Your role is to take my query, interpret it and then invoke appropriate tools to satisfy the request.
+        The user is in Canada. So when presenting web search results always ensure that the domain is in .ca and any measurement results are in metric system. 
+        Ask any follow-up questions if there is additional clarity is required. Present the contents in a way that is digestible to the user.
+        You will be presented with user preferences 
+
+        
+        At a high-level you will access tools with these themes.
+        a) Finances  - Things broadly related to money like credit card bill due dates, any watchlist items, stock prices and metal prices info 
+        b) Informational - Things brodly related to staying upto date. Example:- news update, twitter trends, weather and transit info
+        c) life - Events that you have in calendar that can be birthdays, anniversaries, reminders and other goals.
+        d) Utility - Gives you info about present date and time
+        These are the tools you speciffically have access to:
+        a) get_metal_pr
+    
+    
+    """
+
+
 
 
 def start_react_agent():
