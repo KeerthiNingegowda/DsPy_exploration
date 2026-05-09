@@ -12,8 +12,10 @@ tavily_client = TavilyClient(api_key=TAVILY_KEY)
 ##Taking the exchange rate out of the equation as there is a price difference
 
 def get_metal_prices(tickers:list) -> dict:
-    """ Fetch Gold and Silver prices from Yahoo finance. Convert it into INR and return the price per gram
+    """ Fetch Gold and Silver prices from Yahoo finance. The tool can only access information from Yahoo finance.
     Note: The yahoo ticker returns the value of purest form of metals available for trading. And in US calculations the quantity is troy ounces.
+    Args:-
+        tickers - A list of metal tickers 
     """
 
     metal_tickers = yf.Tickers(" ".join(tickers))
