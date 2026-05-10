@@ -24,12 +24,13 @@ def get_calendar_service():
     return build("calendar", "v3", credentials=creds)
 
 
-def fetch_events(days) -> list:
+def get_events(days) -> list:
     """Fetch upcoming events in the next X days from Google calendar
     Args:
         days - Number of days ahead
     Returns
-        list - Consisting of summary of the events and the date. To not disclose too much personal info i.e creator, email account, invitelink - this decision was made
+        list - Consisting of summary of the events and the date. To not disclose too much personal info i.e creator,
+        email account, invitelink - this decision was made.
         The events consist of birthdays, tasks, reminders, training goals and bill due dates. Includes all day events too.
     """
 

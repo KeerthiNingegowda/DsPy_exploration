@@ -65,3 +65,6 @@ If youn encounter any issues related to token associated with google calendar li
 google.auth.exceptions.RefreshError: ('invalid_grant: Token has been expired or revoked.', {'error': 'invalid_grant', 'error_description': 'Token has been expired or revoked.'}))
 
 ```
+
+Meta Tooling
+Tool description can be reviewed by Claude and ask for its critic to ensure the model anf yourself are on the same page.

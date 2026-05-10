@@ -15,7 +15,9 @@ def get_metal_prices(tickers:list) -> dict:
     """ Fetch Gold and Silver prices from Yahoo finance. The tool can only access information from Yahoo finance.
     Note: The yahoo ticker returns the value of purest form of metals available for trading. And in US calculations the quantity is troy ounces.
     Args:-
-        tickers - A list of metal tickers 
+        tickers - A list of metal tickers.
+    Returns:-
+        A dictionary consisting of the ticker symbols and the last trading price
     """
 
     metal_tickers = yf.Tickers(" ".join(tickers))
@@ -24,7 +26,14 @@ def get_metal_prices(tickers:list) -> dict:
          }
 
 def get_stock_prices(stock_tickers:list, period:str) -> dict:
-    """ Fetch stock prices from Yahoo finance for a given period""" 
+    """ Fetch stock prices from Yahoo finance for a given period
+    Args:-
+        stock_tickers - A list of stock tickers
+        period - Number of days to fetch historical results from
+    Returns:-
+        A dictionary consisting of historical clsoing prices and present market price of input tickers
+    
+    """ 
 
     hist_result = yf.Tickers(" ".join(stock_tickers)).history(period=period)
     dates = hist_result.index.strftime("%Y-%m-%d").tolist()
@@ -40,7 +49,12 @@ def get_stock_prices(stock_tickers:list, period:str) -> dict:
 
 
 def get_creditcard_due_dates(bill_due_info:dict) -> dict:
-    """ Return credit card bill due dates """
+    """ Return credit card bill due dates 
+        Args:-
+            bill_due_info - List of credit cards and their associated due dates.
+        Returns:-  
+            A dictionary consisting of present date and the list of credit cards up for a bill payment
+    """
 
     return {
         "date_today" : utils.get_todays_date(),
@@ -49,7 +63,12 @@ def get_creditcard_due_dates(bill_due_info:dict) -> dict:
 
 def get_watchlist_prices(watchlist_items:list):
 
-    """ Search for prices using Tavily search."""
+    """ Search prices of watchlist items using Tavily search.
+        Args:-
+            watchlist_items - A liist of items that are of interest
+        Returns:-
+            A dictionary consisting of item name and associated search results
+    """
 
     watchlist_results = dict()
 

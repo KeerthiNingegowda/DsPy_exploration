@@ -1,10 +1,10 @@
 import os
-import json
 import logging
 from dotenv import load_dotenv
 from tavily import TavilyClient
 from openai import OpenAI
 from datetime import datetime
+
 load_dotenv()
 
 TAVILY_KEY = os.getenv("TAVILY_KEY")
@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 ##Tool 1 - Get news information
 def get_news(news_list: list[str]) -> dict:
     """Gets latest news for the given topics from the last 24 hours.
-    Args: news_list - List of user preferred news_topics
+    Args: 
+        news_list - List of user preferred news_topics
     Returns:- A dictoionary of summarized responses for each topic within the news_list
     """
     response = dict()
@@ -44,7 +45,8 @@ def get_news(news_list: list[str]) -> dict:
 # Note - Twitter API is very expsenive hence the substitute
 def get_twitter_trends_info(topics: list[str]) -> dict:
     """Gets trends from twitter conditioned by topuc.
-    Args:- topics - List of topics of interest
+    Args:-
+      topics - List of topics of interest
     Returns:- A dictionary consisting key information about the topics and info associated with them
     """
 
@@ -66,7 +68,12 @@ def get_twitter_trends_info(topics: list[str]) -> dict:
 
 ##Tool 3 - Get weather updates - Use tavily again - 
 def get_weather_info(cities: list[str]) -> dict:
-    """Gets weather info for required cities for the entire day"""
+    """Gets weather info for required cities for the entire day
+        Args:- 
+            cities - Cities of interest
+        Returns:- 
+            A dictionary consisting of citiers and their corresponding weather information
+    """
 
     weather_response = dict()
     logger.info("Getting weather info ")
@@ -84,15 +91,26 @@ def get_weather_info(cities: list[str]) -> dict:
     return weather_response
 
 
-##Tool 4 - Transit-info - Google Maps api
-def get_transit_info() -> str:
-    """Get Transit info via LLMs"""
+##Tool 4 - Transit-info - Web search tool 
+def get_transit_info(src:str, dest:str, curr_time:str) -> str:
+    """Get Transit information via LLM from given source and destination
+        Args:-
+            src - Start location
+            dest - Destination location
+            curr_time - Current time
+        Returns:- 
+            A string containing transit information via different modes of transportation
+    """
 
     client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
     response = client.responses.create(
         model="gpt-4o-mini",
         tools = [{"type":"web_search"}],
-        input=f"What is the transit schedule using Go-train from Mimico to Union Station, Toronto on {datetime.now().strftime("%Y-%m-%d %H:%m")} in the next 30 minutes?"
+        input=f""" I want to use transit system to go from {src} to {dest} in the next 30 
+                minutes. The current time is {curr_time}. 
+                Mimic Google Maps. Use all modes like bus, subway, trains, street car. 
+                Display platform info if available and applicable and also display any service alerts.
+                Do not show travel modes with Lyft, Uber or any other taxi services.
+                """
     )
-
     return response.output_text

@@ -56,5 +56,10 @@
             {"item": "Samsung 4K monitor 27 inch", "threshold" : 350},
             {"item": "Sony WH1000XM5 headphones", "threshold": 200},
             {"item": "Atomic Habits hardcover book", "threshold": 15.0}
-    ]
+    ],
+
+    "transit_info" : {
+      "src" : "Oakville",
+      "dest": "Union Station"
+    }
 }
