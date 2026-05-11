@@ -60,11 +60,12 @@ class SnoopyAgentSignature(dspy.Signature):
         Ask user for information if you do not have relevant info required to run a task and/or can't infer from the existing information.
         Do not chug tokens like there is no tomorrow. Be mindful about how much content the user can digest.
 
-        When providing response to the user, do not offer action items for which you dont have capabilities for. For eg:- Saying if you want to setup a notification is a capability you dint have  yet
+        When providing response to the user, do not offer action items for which you dont have capabilities for. For eg:- Saying if you want to setup a notification is a capability you dont have yet.
     """
 
     user_preferences: dict = dspy.InputField(desc="This is default preferences map. Consists of user preferences and personal context")
     query: str = dspy.InputField(desc="User query or request")
+    chat_history : list = dspy.InputField(desc="Chat history for context. You will be given only 10 conversations between system and user for context")
     response: str = dspy.OutputField(desc="Concise and personalized response")
 
 
@@ -85,40 +86,22 @@ def start_react_agent():
         utils.get_todays_date_and_time])
     
     print("Hello! I am Snoppy. How can I help you?")
+    messages_hist = list()
     while True:
         query = input().strip()
         if query.lower() == "exit" or query.lower() == "quit":
             break
+        messages_hist.append({"role":"user", "content": query})
         res = snoopy_agent(user_preferences=user_preferences, 
-                           query=query).response
-        print(res)
+                           query=query,
+                           chat_history=messages_hist[-10:]) #The most recent 10 chat history
+        messages_hist.append({"role":"assisstant", "content":res.response})
+        print(dspy.inspect_history(n=1))
+        print("\n\n")
+        print(res.response)
 
 
-
-    ##Just invoke as is one can hook it with agent later
-    # news_responses = informational.get_news(user_preferences["news_questions"])
-    # print(news_responses)
-    # twitter_responses = informational.get_twitter_trends_info(user_preferences["twitter_tavily"][0:5])
-    # print(twitter_responses)
-    # weather_responses = informational.get_weather_info(user_preferences["weather_location"])
-    # print(weather_responses)
-
-    # ##Life tools
-    # events = life.fetch_events(user_preferences["days_lookahead"]) ##Should take the default or be directed from user query
-    # print(events)
-
-    # #Finances tools
-    # metal_prices = finances.get_metal_prices(user_preferences["metal_tickers"])
-    # print(metal_prices)
-    # stock_prices = finances.get_stock_prices(user_preferences["stock_tickers"], user_preferences["stock_period_of_interest"])
-    # print(stock_prices)
-
-    # print(finances.get_creditcard_due_dates(user_preferences["credit_card_bill_due_dates"]))
-    # print(finances.get_watchlist_prices(user_preferences["watchlist_items"]))
-
-   # print(informational.get_transit_info())
 
 
 if __name__ == "__main__":
     start_react_agent()
-    # print(user_preferences["news_questions"][0:2])

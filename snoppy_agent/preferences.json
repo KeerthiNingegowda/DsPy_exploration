@@ -60,5 +60,22 @@
     "transit_info" : {
       "src" : "Oakville",
       "dest": "Union Station"
-    }
+    },
+
+    "channel_metadata" : [
+      {
+        "name" : "3Blue1Brown",
+        "channel_id": "UCYO_jab_esuFRV4b17AJtAw"
+      },
+      {
+        "name" : "AndrejKarpathy",
+        "channel_id":""
+
+      },
+      {
+        "name":"aiDotEngineer",
+        "channel_id": "UCLKPca3kwwd-B59HNr-_lvA"
+      }
+    ]
+    
 }
