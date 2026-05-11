@@ -11,7 +11,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 ##Load Snoopy tools
-from tools import informational, finances, life, utils
+from tools import informational, finances, life, utils, learn
 
 load_dotenv()
 
@@ -40,7 +40,8 @@ class SnoopyAgentSignature(dspy.Signature):
         a) Finances  - Things broadly related to money like credit card bill due dates, any watchlist items, stock prices and metal prices info 
         b) Informational - Things brodly related to staying upto date about the world. Example:- news update, twitter trends, weather and transit info
         c) life - Events that you have in calendar that can be birthdays, anniversaries, reminders and other goals.
-        d) Utility - Gives you info about present date and time
+        d) learning - Helping the user to learn from their favorite podcasts or shows, so that they can decide if it is worth spending time exploring it.
+        e) Utility - Gives you info about present date and time
 
         These are the tools you speciffically have access to:
         a) get_metal_prices - Gets the gold and silver (precious metal) prices from Yahoo Finance.
@@ -54,6 +55,7 @@ class SnoopyAgentSignature(dspy.Signature):
         i) get_events - Pulls upcoming events in the next X days from Google calendar.
         j) get_todays_date - Gets today's date
         k) get_todays_date_and_time - Gets today's date and time
+        l) get_youtube_summaries - Given a channel name, get the channel id(if not available) and other metadata to fetch transcript summaries from the most recent k videos. You will get summaries of the transcript not the raw transcript.
 
         Use these tools cautiously and be mindful of making duplicate or redundant tool calls as it incurs additional API costs.
         Where applicable for eg: get_metal_prices and get_stock_prices if I am pulling information on a day when markets are closed, use other utility tools to tell me if the markets are closed.
@@ -69,8 +71,6 @@ class SnoopyAgentSignature(dspy.Signature):
     response: str = dspy.OutputField(desc="Concise and personalized response")
 
 
-
-
 def start_react_agent():
 
     snoopy_agent = dspy.ReAct(signature=SnoopyAgentSignature, tools = [informational.get_news,
@@ -82,6 +82,7 @@ def start_react_agent():
         finances.get_stock_prices,
         finances.get_watchlist_prices,
         finances.get_creditcard_due_dates,
+        learn.get_youtube_summaries,
         utils.get_todays_date,
         utils.get_todays_date_and_time])
     

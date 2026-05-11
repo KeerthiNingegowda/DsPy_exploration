@@ -46,8 +46,10 @@ Google Dev console access - For Google calendar. For more info checkout this <a 
 
 For financial tools, yfinance is used. Please refer to their terms and conditions before you proceed.
 
-For transit search, I am using web search via LLMs directly rather than Google Maps, for brevity
+For transit search, I am using web search via LLMs directly rather than Google Maps, for brevity.
 
+For Youtube Data API v3, Refer to Google Dev console. Note:- You will get 10K daily limit. However, some calls we take 100 of those
+credits. So use it efficiently. Which is the rationale for hard-coding channel_id
 
 
 ## Other helpful stuff
