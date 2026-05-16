@@ -51,6 +51,10 @@ For transit search, I am using web search via LLMs directly rather than Google M
 For Youtube Data API v3, Refer to Google Dev console. Note:- You will get 10K daily limit. However, some calls we take 100 of those
 credits. So use it efficiently. Which is the rationale for hard-coding channel_id
 
+## Testing framework
+
+<img src="./Snoppy_eval.png" alt="Snoopy evaluation framework">
+
 
 ## Other helpful stuff
 
