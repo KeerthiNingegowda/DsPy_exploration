@@ -13,6 +13,11 @@ logger = logging.getLogger(__name__)
 ##Load Snoopy tools
 from tools import informational, finances, life, utils, learn
 
+#Evaluator logic
+from evals import prep_data, build_evaluator
+from datasets import trainset, testset
+
+
 load_dotenv()
 
 ANTHROPIC_KEY = os.getenv("ANTHROPIC_KEY")
@@ -71,20 +76,21 @@ class SnoopyAgentSignature(dspy.Signature):
     response: str = dspy.OutputField(desc="Concise and personalized response")
 
 
-def start_react_agent():
 
-    snoopy_agent = dspy.ReAct(signature=SnoopyAgentSignature, tools = [informational.get_news,
-        informational.get_twitter_trends_info,
-        informational.get_weather_info,
-        informational.get_transit_info,
-        life.get_events,
-        finances.get_metal_prices,
-        finances.get_stock_prices,
-        finances.get_watchlist_prices,
-        finances.get_creditcard_due_dates,
-        learn.get_youtube_summaries,
-        utils.get_todays_date,
-        utils.get_todays_date_and_time])
+snoopy_agent = dspy.ReAct(signature=SnoopyAgentSignature, tools = [informational.get_news,
+    informational.get_twitter_trends_info,
+    informational.get_weather_info,
+    informational.get_transit_info,
+    life.get_events,
+    finances.get_metal_prices,
+    finances.get_stock_prices,
+    finances.get_watchlist_prices,
+    finances.get_creditcard_due_dates,
+    learn.get_youtube_summaries,
+    utils.get_todays_date,
+    utils.get_todays_date_and_time])
+
+def start_react_agent():
     
     print("Hello! I am Snoppy. How can I help you?")
     messages_hist = list()
@@ -94,15 +100,20 @@ def start_react_agent():
             break
         messages_hist.append({"role":"user", "content": query})
         res = snoopy_agent(user_preferences=user_preferences, 
-                           query=query,
-                           chat_history=messages_hist[-10:]) #The most recent 10 chat history
-        messages_hist.append({"role":"assisstant", "content":res.response})
+                            query=query,
+                            chat_history=messages_hist[-10:]) #The most recent 10 chat history
+        messages_hist.append({"role":"assistant", "content":res.response})
         print(dspy.inspect_history(n=1))
         print("\n\n")
         print(res.response)
 
 
+def evaluate_agent():
+    devset = prep_data(testset.testset, user_preferences)
+    evaluator = build_evaluator(devset)
+    print(evaluator(snoopy_agent))
 
 
 if __name__ == "__main__":
-    start_react_agent()
+    #start_react_agent()
+    evaluate_agent()

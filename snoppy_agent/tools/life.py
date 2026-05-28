@@ -55,3 +55,4 @@ def get_events(days) -> list:
         f"Event - {ele["summary"]} on {ele["start"].get("dateTime") or ele["start"].get("date")}"
         for ele in items
     ]
+
