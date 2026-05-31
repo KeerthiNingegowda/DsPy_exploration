@@ -2,16 +2,21 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 import logging
+import http.cookiejar
+import requests
 
 logger = logging.getLogger(__name__)
 
 from googleapiclient.discovery import build
 from youtube_transcript_api import YouTubeTranscriptApi
 
+
 load_dotenv()
 
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 youtube = build("youtube", "v3", developerKey=YOUTUBE_API_KEY)
+
+COOKIE_PATH = os.path.join(os.getcwd(), "youtube_cookies.txt")
 
 #DAILY QUOTA LIMIT - 10K
 
@@ -62,8 +67,13 @@ def get_transcript(video_id:str) -> str:
             video_id - video id
         Returns video transcipt
     """
-    ytt_api = YouTubeTranscriptApi()
     try:
+        session = requests.Session()
+        cookie_jar = http.cookiejar.MozillaCookieJar(COOKIE_PATH)
+        cookie_jar.load(ignore_discard=True, ignore_expires=True)
+        session.cookies = cookie_jar
+
+        ytt_api = YouTubeTranscriptApi(http_client=session)
         transcript = ytt_api.fetch(video_id)
         return " ".join([entry.text for entry in transcript])
     except Exception as e:

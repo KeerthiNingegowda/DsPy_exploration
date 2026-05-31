@@ -3,6 +3,7 @@ import json
 import logging
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -17,11 +18,13 @@ from tools import informational, finances, life, utils, learn
 from evals import prep_data, build_evaluator
 from datasets import trainset, testset
 
+#Optimization
+import optimization as ot
+
 
 load_dotenv()
 
 ANTHROPIC_KEY = os.getenv("ANTHROPIC_KEY")
-OPENAI_KEY = os.getenv("OPENAI_KEY")
 
 #Setup DSPy object
 lm = dspy.LM("anthropic/claude-haiku-4-5-20251001", api_key=ANTHROPIC_KEY)
@@ -103,17 +106,43 @@ def start_react_agent():
                             query=query,
                             chat_history=messages_hist[-10:]) #The most recent 10 chat history
         messages_hist.append({"role":"assistant", "content":res.response})
-        print(dspy.inspect_history(n=1))
-        print("\n\n")
-        print(res.response)
 
 
-def evaluate_agent():
-    devset = prep_data(testset.testset, user_preferences)
-    evaluator = build_evaluator(devset)
-    print(evaluator(snoopy_agent))
 
+def evaluate_agent(dataset, fname, pred_module):
+    devset = prep_data(dataset, user_preferences)
+    evaluator = build_evaluator(devset, fname)
+    return evaluator(pred_module)
+
+def optimize_agent(train_data:list, agent_save_path:str):
+    mipro = ot.create_mipro_optimizer()
+    optimized_snoppy_agent = mipro.compile(
+        student=snoopy_agent,
+        trainset=train_data
+    )
+
+    optimized_snoppy_agent.save(f"./tuning_results/tuned_agents/{agent_save_path}.json")
+
+    return optimized_snoppy_agent
+
+def save_prompt(agent, fname):
+    path = f"./tuning_results/prompts/{fname}.txt"
+    with open(path, "w") as f:
+        f.write(f"Timestamp: {datetime.now().isoformat()}\n\n")
+        for name, predictor in agent.named_predictors():
+            f.write(f"=== {name} ===\n")
+            f.write(predictor.signature.instructions)
+            f.write("\n\n")
 
 if __name__ == "__main__":
     #start_react_agent()
-    evaluate_agent()
+    baseline_test_result = evaluate_agent(prep_data(testset.testset, user_preferences), "baseline_results_excluded_youtube_examples_final.json", snoopy_agent)
+    save_prompt(snoopy_agent, "baseline_prompt")
+    optimized_snoopy_agent = optimize_agent(prep_data(trainset.trainset, user_preferences),"optimized_snoopy")
+    save_prompt(optimized_snoopy_agent, "optimized_prompt")
+    optimized_test_result = evaluate_agent(prep_data(testset.testset,user_preferences), "tuned_results_excluded_youtube_examples_final.json", optimized_snoopy_agent)
+    print(f"Baseline accuracy on testset - {baseline_test_result}")
+    print(f"Optimized agent accuracy on testset - {optimized_test_result}")
+
+
+
