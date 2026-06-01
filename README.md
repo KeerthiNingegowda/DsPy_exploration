@@ -82,7 +82,7 @@ credits. So use it efficiently. Which is the rationale for hard-coding channel_i
 
 ## Testing framework
 
-<img src="./Snoppy_eval.png" alt="Snoopy evaluation framework">
+<img src="./Snoopy_eval.png" alt="Snoopy evaluation framework">
 
 Given that accuracy evaluation in this scenario is very time-based, I have opted to do a LLM as ajudge approach withy an independent ground truth generation using web search from other LLM providers. Results of accuracy evaluation can be found here <a href="./snoppy_agent/accuracy_eval/eval1.json">
 
