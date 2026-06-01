@@ -123,6 +123,7 @@ def start_react_agent():
             query=query,
             chat_history=messages_hist[-10:],
         )  # The most recent 10 chat history
+        print(f"Snoopy's response - {res.response}")
         messages_hist.append({"role": "assistant", "content": res.response})
 
 
