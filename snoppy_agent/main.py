@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 from tools import informational, finances, life, utils, learn
 
 #Evaluator logic
-from evals import prep_data, build_evaluator
-from datasets import trainset, testset
+from evals import prep_data, build_evaluator, ground_truth_for_accuracy_evaluation, llm_as_a_judge_accuracy_eval
+from datasets import trainset, testset, accuracy_data
 
 #Optimization
 import optimization as ot
@@ -134,15 +134,32 @@ def save_prompt(agent, fname):
             f.write(predictor.signature.instructions)
             f.write("\n\n")
 
+def get_snoopy_pred_for_accuracy_eval(agent_module, dataset):
+    """ Runs LLM as a judge to evalaute content accuracy"""
+    results = dict()
+
+    for example in dataset:
+        snoopy_response = agent_module(user_preferences=user_preferences, query=example["query"], chat_history=[])
+        ground_truth = ground_truth_for_accuracy_evaluation(example["query"], user_preferences)
+        judge_response = llm_as_a_judge_accuracy_eval(example["query"],ground_truth, snoopy_response.response, user_preferences)
+
+        results[example["query"]] = {"snoopy_response":snoopy_response.response, "ground_truth":ground_truth, "judge_score":judge_response[0], "judge_reasoning":judge_response[1]}
+        
+    with open(f"./accuracy_eval/eval1.json", "w") as f:
+        json.dump(results, f)
+
+
+
 if __name__ == "__main__":
-    #start_react_agent()
-    baseline_test_result = evaluate_agent(prep_data(testset.testset, user_preferences), "baseline_results_excluded_youtube_examples_final.json", snoopy_agent)
-    save_prompt(snoopy_agent, "baseline_prompt")
-    optimized_snoopy_agent = optimize_agent(prep_data(trainset.trainset, user_preferences),"optimized_snoopy")
-    save_prompt(optimized_snoopy_agent, "optimized_prompt")
-    optimized_test_result = evaluate_agent(prep_data(testset.testset,user_preferences), "tuned_results_excluded_youtube_examples_final.json", optimized_snoopy_agent)
-    print(f"Baseline accuracy on testset - {baseline_test_result}")
-    print(f"Optimized agent accuracy on testset - {optimized_test_result}")
+    start_react_agent()
+    # baseline_test_result = evaluate_agent(prep_data(testset.testset, user_preferences), "baseline_results_excluded_youtube_examples_final.json", snoopy_agent)
+    # save_prompt(snoopy_agent, "baseline_prompt")
+    # optimized_snoopy_agent = optimize_agent(prep_data(trainset.trainset, user_preferences),"optimized_snoopy")
+    # save_prompt(optimized_snoopy_agent, "optimized_prompt")
+    # optimized_test_result = evaluate_agent(prep_data(testset.testset,user_preferences), "tuned_results_excluded_youtube_examples_final.json", optimized_snoopy_agent)
+    # print(f"Baseline accuracy on testset - {baseline_test_result}")
+    # print(f"Optimized agent accuracy on testset - {optimized_test_result}")
+    #get_snoopy_pred_for_accuracy_eval(snoopy_agent, accuracy_data.accuracy_set)
 
 
 

@@ -10,6 +10,8 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_KEY")
 ANTHROPIC_KEY = os.getenv("ANTHROPIC_KEY")
 
+from datasets import accuracy_data
+
 
 ##For this function, to better understand trace, first try printing trace as is and then backtrack
 def extract_tools_from_trace(pred):
@@ -33,7 +35,7 @@ def eval_tool_presence(example:dspy.Example, actual_tools:list) -> float:
     return 1.0 if not missing else 0.0
 
 
-def ground_truth_for_accuracy_evaluation(query_context:str) -> str:
+def ground_truth_for_accuracy_evaluation(query_context:str, user_preferences:dict) -> str:
     """ Function that provides ground truth to evaluate accuracy for subjective and/or unbounded tasks"""
 
     client = OpenAI(api_key=OPENAI_API_KEY)
@@ -41,19 +43,24 @@ def ground_truth_for_accuracy_evaluation(query_context:str) -> str:
         model="gpt-5.4-mini",
         tools=[{"type":"web_search"}],
         max_output_tokens=600,
-        input=f"""Search and find the current accurate information for {query_context}.
+        input=f"""Search and find the current accurate information for {query_context}. For referbece you will be given 
+        information about user preferences {user_preferences}. Unless the query explicitly asks for information that
+    is different than preferences, always refer to this information to know about user interest.
           Return only the factual data you find. Be concise and specific with numbers and dates."""
     )
     return response.output_text
 
 
-def llm_as_a_judge_accuracy_eval(ground_truth:str, predicted_response:str, variance:str="2%") -> tuple[float,str]:
+def llm_as_a_judge_accuracy_eval(query:str, ground_truth:str, predicted_response:str, user_preferences:dict, variance:str="2-4%") -> tuple[float,str]:
     """ Return a accuracy score for subjective tasks"""
-    prompt = f"""You are evaluating an AI assistant response for factual accuracy.
+    prompt = f"""You are evaluating an AI assistant response for factual accuracy for a give query.
+    The query is as follows {query}
     Independently verified current information:{ground_truth}
     Agent response to evaluate:{predicted_response}
+    You will be given user preference sfor reference {user_preferences}. Unless the query explicitly asks for information that
+    is different than preferences, always refer to this information to know about user interest.
     Compare the agent response against the verified information.Allow up to {variance} variance- if testing quantitative values.
-    Be lenient on wording, strict on facts.Respond in this exact format:
+    Be lenient on wording, strict on facts.Respond in this exact format. DO NOT add any other text fields:
     Score: <float 0.0 to 1.0>
     Reason: <one sentence>"""
 
@@ -76,6 +83,7 @@ def llm_as_a_judge_accuracy_eval(ground_truth:str, predicted_response:str, varia
 def snoopy_metrics(example, pred, trace=None) -> float:
 
     """ Aggregate the metrics from all eval functions"""
+
     actual_tools = extract_tools_from_trace(pred)
     print(actual_tools)
     res = eval_tool_presence(example, actual_tools)
@@ -99,4 +107,3 @@ def build_evaluator(devset:list, path_to_save:str):
         display_progress=True,
         save_as_json=f"./tuning_results/{path_to_save}"
     )
-

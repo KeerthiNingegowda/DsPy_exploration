@@ -75,6 +75,7 @@ def get_transcript(video_id:str) -> str:
 
         ytt_api = YouTubeTranscriptApi(http_client=session)
         transcript = ytt_api.fetch(video_id)
+        #print(ytt_api.fetch("dQw4w9WgXcQ"))
         return " ".join([entry.text for entry in transcript])
     except Exception as e:
         logger.warning(str(e))
