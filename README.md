@@ -4,7 +4,7 @@ This repo consists of all the exploration related DSPy which consists of general
 
 For the building blocks of DSPy i.e. signature composition, modules, optimizers, custom modules and building/optimizing agents using ReAct pattern refer <a href="./cheatsheet_optimizers_react_custom_modules">here </a>
 
-Medium blog post:- TBD
+Medium blog post:- https://medium.com/@keerthi.ningegowda/in-structure-and-in-chaos-in-evals-and-in-vibes-till-dspy-do-us-part-and-optimization-do-us-in-12ed50d5c9a9
 
 
 ## Snoopy agent - A personal assistant to know your day better than you do
